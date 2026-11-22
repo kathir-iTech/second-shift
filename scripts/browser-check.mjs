@@ -8,7 +8,7 @@ const browser=await chromium.launch({executablePath,headless:true});
 try{
  const page=await browser.newPage({viewport:{width:1280,height:900}});
  const errors=[];page.on('pageerror',e=>errors.push(e.message));
- await page.goto(pathToFileURL(resolve('Review Second Shift.html')).href);
+ await page.goto(process.env.SECOND_SHIFT_REVIEW_URL || pathToFileURL(resolve('Review Second Shift.html')).href);
  await page.locator('[data-case]').first().waitFor();
  const keys=async()=>page.locator('[data-case]').evaluateAll(xs=>xs.map(x=>x.dataset.case));
  const ids=await keys();assert.equal(ids.length,10);
