@@ -1,0 +1,21 @@
+modules:
+  jira:projectPage:
+    - key: second-shift-review
+      title: Second Shift
+      resource: review
+      resolver:
+        function: resolver
+  function:
+    - key: resolver
+      handler: index.handler
+resources:
+  - key: review
+    path: static
+permissions:
+  scopes:
+    - read:jira-work
+    - storage:app
+app:
+  runtime:
+    name: nodejs24.x
+  id: ari:cloud:ecosystem::app/a18629fc-fb34-4a50-aaee-c5b297a4a98b

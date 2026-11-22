@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Second Shift · Policy review</title>STYLE</head>
+<body>
+<header><a class="brand" href="#main"><i aria-hidden="true">↱</i>Second Shift</a><span class="header-label">Service operations</span><button id="help">How to review</button></header>
+<main id="main">
+<section class="intro"><div><small id="scope"></small><h1>Priority review</h1><p>See which incidents a policy change would have demoted at triage.</p></div><nav aria-label="Data source"><button id="sample">Public archive</button><button id="live">Jira project</button></nav></section>
+<div id="notice" role="status" aria-live="polite"></div>
+<form hidden id="config"><h2>Connect a Jira project</h2><p>Choose the two fields that determine priority and the workflow status that marks triage.</p><div class="mapping"><label>Impact field<select required id="impact"></select></label><label>Urgency field<select required id="urgency"></select></label><label>Triage status<select required id="triage"></select></label></div><button id="load" class="primary">Load visible tickets</button></form>
+<section id="stats" aria-label="Review totals"></section>
+<details id="policy"><summary>Policy matrix <small>Compare baseline and proposal</small></summary><p id="policy-note"></p><div class="matrixrow labels"><span>Impact / urgency</span><span>Baseline</span><span>Proposal</span></div><div id="matrix"></div><button id="revert">Revert proposal to baseline</button> <button id="example">Restore example proposal</button></details>
+<div class="workspace">
+<section class="panel queue"><div class="panel-title"><h2>Review queue</h2><small id="dataset"></small></div><div class="filters"><label>Show<select id="filter"><option>Missed by current fields</option><option>Demoted</option><option>Promoted</option><option>Unchanged</option><option>Unknown</option><option>Baseline discrepancies</option><option>All cases</option></select></label><label>Find ticket<input id="query" type="search" placeholder="Search by ID"></label></div><div class="case cols"><span>Incident</span><span>Impact / urgency</span><span>Change</span></div><div id="cases"></div><div class="paging"><button id="prev">Previous</button><small id="count"></small><button id="next">Next</button></div></section>
+<section class="panel detail" id="detail" aria-label="Selected incident"></section></div>
+<section class="panel saved"><h2>Saved test cases</h2><div id="checks"></div></section>
+<footer>Example data adapted from Amaral, Fantinato &amp; Peres (2018). <a href="https://doi.org/10.24432/C57S4H">UCI incident log</a> · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>. First recorded update is a proxy for triage.</footer>
+</main>
+<dialog id="guide"><h2>Review a priority change</h2><ol><li><b>Inspect a missed ticket.</b> The archive opens on incidents that would disappear from the review if you used their latest fields.</li><li><b>Save your expectation.</b> Choose the priority this ticket should receive, add a reason, and save it as a test case.</li><li><b>Change the policy.</b> Use “Edit this policy cell” to change the proposed priority. Check whether your saved case now passes.</li></ol><p>For your own data, open the app inside Jira and choose <b>Jira project</b>. All priority edits are simulations.</p><button id="close-help" class="primary">Back to review</button></dialog>
+SCRIPT</body></html>

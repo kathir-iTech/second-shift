@@ -1,0 +1,43 @@
+import {chromium} from '@playwright/test';
+import {existsSync} from 'node:fs';
+import {resolve} from 'node:path';
+import {pathToFileURL} from 'node:url';
+import assert from 'node:assert/strict';
+const executablePath=[process.env.SECOND_SHIFT_BROWSER,'C:/Program Files/Google/Chrome/Application/chrome.exe','C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe'].find(x=>x&&existsSync(x));
+const browser=await chromium.launch({executablePath,headless:true});
+try{
+ const page=await browser.newPage({viewport:{width:1280,height:900}});
+ const errors=[];page.on('pageerror',e=>errors.push(e.message));
+ await page.goto(pathToFileURL(resolve('Review Second Shift.html')).href);
+ await page.locator('[data-case]').first().waitFor();
+ const keys=async()=>page.locator('[data-case]').evaluateAll(xs=>xs.map(x=>x.dataset.case));
+ const ids=await keys();assert.equal(ids.length,10);
+ await page.getByRole('button',{name:'How to review'}).click();
+ assert.equal(await page.locator('dialog').isVisible(),true);
+ await page.getByRole('button',{name:'Back to review'}).click();
+ await page.getByRole('button',{name:'Edit this policy cell'}).click();
+ assert.equal(await page.locator(':focus').getAttribute('aria-label'),'Proposal Medium High');
+ await page.locator('#policy summary').click();
+ await page.evaluate(()=>window.scrollTo(0,0));
+ if(process.env.SECOND_SHIFT_SCREENSHOT)await page.screenshot({path:process.env.SECOND_SHIFT_SCREENSHOT});
+ assert.equal(await page.locator('#stats strong').nth(2).textContent(),'17');
+ await page.locator('#reason').fill('Preserve high priority for this example.');
+ await page.locator('#pin button').click();
+ assert.match(await page.locator('#checks').innerText(),/Fail/);
+ await page.reload();await page.locator('#policy summary').click();
+ await page.locator('#revert').click();
+ assert.equal(await page.locator('#stats strong').nth(1).textContent(),'0');
+ assert.match(await page.locator('#checks').innerText(),/Pass/);
+ await page.getByLabel('Proposal Medium High',{exact:true}).selectOption('Moderate');
+ await page.locator('#next').click();assert.equal((await keys()).length,7);
+ await page.locator('#prev').click();
+ await page.locator('[data-case]').nth(1).click();
+ await page.locator('#expected').selectOption('Moderate');await page.locator('#reason').fill('Different expectation for the same inputs.');await page.locator('#pin button').click();
+ assert.match(await page.locator('#checks').innerText(),/cannot satisfy both/);
+ await page.locator('#live').click();assert.match(await page.locator('#notice').innerText(),/installed Jira app/);
+ await page.setViewportSize({width:390,height:844});
+ if(process.env.SECOND_SHIFT_MOBILE_SCREENSHOT)await page.screenshot({path:process.env.SECOND_SHIFT_MOBILE_SCREENSHOT});
+ assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'mobile overflow');
+ assert.deepEqual(errors,[]);console.log('Browser passed: first run, pin, reload, revert, edit, pagination, conflicting cases, standalone message and narrow layout.');
+}finally{await browser.close();}
+

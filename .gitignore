@@ -1,0 +1,8 @@
+node_modules/
+static/
+Review Second Shift.html
+Connect Forge.cmd
+.env
+.env.*
+*.log
+

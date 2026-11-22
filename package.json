@@ -1,0 +1,30 @@
+{
+  "name": "second-shift",
+  "version": "1.0.0",
+  "description": "Rehearse Jira incident priority policies against historical evidence.",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "node --test test/replay.test.mjs",
+    "build": "node scripts/build.mjs"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "@forge/api": "^8.5.0",
+    "@forge/bridge": "^7.3.0",
+    "@forge/kvs": "^2.1.2",
+    "@forge/resolver": "^2.0.2"
+  },
+  "devDependencies": {
+    "@forge/cli": "^14.2.0",
+    "@playwright/test": "^1.65.1",
+    "esbuild": "^0.28.2"
+  },
+  "private": "true"
+}
+
